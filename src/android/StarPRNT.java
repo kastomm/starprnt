@@ -51,7 +51,7 @@ import android.text.TextPaint;
 import android.util.Log;
 import android.util.Base64;
 
-
+import android.os.Build; // Import the Build class
 
 /**
  * This class echoes a string called from JavaScript.
@@ -272,7 +272,7 @@ public class StarPRNT extends CordovaPlugin {
                 arrayDiscovery.add(portInfo);
             }
         }
-        if (interfaceName.equals("USB") || interfaceName.equals("All")) {
+        if (interfaceName.equals("USB") || interfaceName.equals("All") && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             try {
                 USBPortList = StarIOPort.searchPrinter("USB:", context);
             }catch (StarIOPortException e) {
@@ -300,13 +300,13 @@ public class StarPRNT extends CordovaPlugin {
                     }else if (!discovery.getModelName().equals("")){
                         port.put("modelName", discovery.getModelName());
                 }
-            } else if (interfaceName.equals("USB") || interfaceName.equals("All")) {
-                if (!discovery.getModelName().equals("")) {
-                    port.put("modelName", discovery.getModelName());
-                }
-                if (!discovery.getUSBSerialNumber().equals(" SN:")) {
-                    port.put("USBSerialNumber", discovery.getUSBSerialNumber());
-                }
+            } else if (interfaceName.equals("USB") || interfaceName.equals("All") && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                // if (!discovery.getModelName().equals("")) {
+                //     port.put("modelName", discovery.getModelName());
+                // }
+                // if (!discovery.getUSBSerialNumber().equals(" SN:")) {
+                //     port.put("USBSerialNumber", discovery.getUSBSerialNumber());
+                // }
             }
 
             arrayPorts.put(port);
